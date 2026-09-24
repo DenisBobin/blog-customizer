@@ -1,3 +1,4 @@
+import { clsx } from 'clsx';
 import { useState, useRef } from 'react';
 import {
   fontFamilyOptions,
@@ -27,13 +28,13 @@ type ArticleParamsFormProps = {
 export const ArticleParamsForm = ({
   setArticleState,
 }: ArticleParamsFormProps): React.JSX.Element => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const asideRef = useRef<HTMLElement>(null);
 
   useOutsideClickClose({
-    isOpen,
+    isOpen: isSidebarOpen,
     rootRef: asideRef,
-    onChange: setIsOpen,
+    onChange: setIsSidebarOpen,
   });
 
   const [fontFamily, setFontFamily] = useState<OptionType>(
@@ -78,10 +79,15 @@ export const ArticleParamsForm = ({
 
   return (
     <>
-      <ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+      <ArrowButton
+        isOpen={isSidebarOpen}
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
       <aside
         ref={asideRef}
-        className={`${styles.container} ${isOpen ? styles.container_open : ''}`}
+        className={clsx(styles.container, {
+          [styles.container_open]: isSidebarOpen,
+        })}
       >
         <form className={styles.form} onSubmit={handleSubmit} onReset={handleReset}>
           <Select
